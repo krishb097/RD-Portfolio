@@ -43,8 +43,6 @@ A Fully Mobile Responsive Portfolio.
 ### 🌐 Connect with Me:
 <p align="left">
 <a href="https://www.linkedin.com/in/krishna-rao097" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="krishna-barot" height="30" width="40" /></a>
-<a href="mailto:krishnabarot544@gmail.com" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/gmail.svg" alt="krishnabarot544" height="30" width="40" /></a>
-</p>
 
 ---
 
