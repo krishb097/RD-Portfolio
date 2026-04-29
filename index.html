@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishna Barot | RD-Industries</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        :root {
+            --obsidian: #050505;
+            --glass-bg: rgba(15, 15, 15, 0.9); 
+            --sky-blue: #00D2FF;
+            --deep-blue: #0072FF;
+            --text-main: #FFFFFF;
+            --text-dim: #B0B0B0;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow: 0 0 20px rgba(0, 210, 255, 0.3);
+            --transition: all 0.4s cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 114, 255, 0.07) 0%, transparent 40%);
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 20px; left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 1200px;
+            height: 70px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 30px; z-index: 1000;
+            transition: var(--transition);
+        }
+        nav.scrolled { top: 0; width: 100%; border-radius: 0; border-bottom: 1px solid var(--sky-blue); }
+        
+        .logo-box { display: flex; align-items: center; gap: 10px; }
+        .logo-box img { height: 35px; width: auto; border-radius: 5px; object-fit: contain; }
+        .logo-text { font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; white-space: nowrap; }
+        .logo-text span { color: var(--sky-blue); }
+
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--sky-blue); }
+
+        .menu-btn { display: none; color: var(--text-main); font-size: 1.5rem; cursor: pointer; }
+
+        /* --- SECTIONS --- */
+        section { padding: 100px 8%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+        .hero h1 { font-size: clamp(32px, 8vw, 80px); font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+        .hero h1 span { background: linear-gradient(90deg, var(--sky-blue), var(--deep-blue)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero h3 { font-size: clamp(16px, 4vw, 22px); color: var(--sky-blue); margin-bottom: 20px; }
+        .hero p { font-size: clamp(14px, 3vw, 18px); color: var(--text-dim); max-width: 600px; margin-bottom: 35px; }
+
+        .btn-glass {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, var(--sky-blue), var(--deep-blue));
+            color: white; border-radius: 12px; font-weight: 600;
+            text-decoration: none; border: none; cursor: pointer;
+            box-shadow: var(--glow); transition: var(--transition);
+            display: inline-block; font-size: 0.9rem;
+        }
+        .btn-glass:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 210, 255, 0.4); }
+
+        /* --- SKILLS GRID --- */
+        .section-title { font-size: clamp(24px, 6vw, 40px); margin-bottom: 40px; text-align: center; }
+        .section-title span { color: var(--sky-blue); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .glass-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 30px; border-radius: 20px; backdrop-filter: blur(10px);
+            transition: var(--transition); text-align: center;
+        }
+        .glass-card:hover { border-color: var(--sky-blue); transform: translateY(-8px); }
+        .glass-card i { font-size: 2.2rem; color: var(--sky-blue); display: block; }
+        .glass-card h3 { margin-bottom: 12px; font-size: 1.3rem; }
+
+        /* --- MODAL --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none; justify-content: center; align-items: center;
+            z-index: 2000; backdrop-filter: blur(10px); padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--obsidian); border: 1px solid var(--sky-blue);
+            padding: 30px; border-radius: 20px; width: 100%; max-width: 450px;
+            position: relative;
+        }
+        .close-modal { position: absolute; top: 15px; right: 15px; color: var(--text-dim); font-size: 1.2rem; cursor: pointer; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--sky-blue); font-size: 0.85rem; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border); border-radius: 8px; color: white; outline: none; font-size: 0.9rem;
+        }
+
+        /* --- FOOTER (FIXED RESPONSIVE AND DESIGN) --- */
+        footer { padding: 40px 8%; border-top: 1px solid var(--glass-border); text-align: center; background: rgba(0,0,0,0.4); }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .footer-logo { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px; 
+            flex-wrap: nowrap;
+        }
+        .footer-logo img { 
+            height: clamp(30px, 5vw, 40px); 
+            width: auto; 
+            border-radius: 5px; 
+            object-fit: contain;
+        }
+        .footer-logo-text {
+            font-weight: 800;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+        .footer-logo-text span {
+            color: var(--sky-blue);
+        }
+        .footer-text { font-size: clamp(0.8rem, 2vw, 0.85rem); color: var(--text-dim); }
+
+        /* --- ANIMATIONS --- */
+        .reveal { opacity: 0; transform: translateY(25px); transition: 0.7s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- MOBILE RESPONSIVE QUERIES --- */
+        @media (max-width: 850px) {
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+                background: var(--obsidian); flex-direction: column; align-items: center;
+                justify-content: center; transition: 0.5s; border-left: 1px solid var(--glass-border);
+            }
+            .nav-links.active { right: 0; }
+            .menu-btn { display: block; }
+            nav { width: 95%; top: 10px; padding: 0 20px; }
+        }
+
+        @media (max-width: 480px) {
+            section { padding: 80px 6%; }
+            .hero { text-align: center; align-items: center; }
+            .hero p { margin: 0 auto 30px auto; }
+            .contact-info { flex-direction: column; gap: 15px !important; }
+            .footer-logo { flex-direction: row; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="logo-box">
+            <img src="https://i.ibb.co/T50n8sP/rd-logo.jpg" alt="RD-Industries">
+            <div class="logo-text">RD-<span>INDUSTRIES</span></div>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" onclick="closeMenu()">Home</a></li>
+            <li><a href="#skills" onclick="closeMenu()">Expertise</a></li>
+            <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+        </ul>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars-staggered"></i>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="reveal">
+            <h3>Innovating the Web</h3>
+            <h1>I'm <span>Krishna Barot.</span></h1>
+            <p>Founder of <strong>RD-Industries</strong>. Specialist in building high-performance digital experiences and high-impact visual storytelling.</p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: inherit;">
+                <button class="btn-glass open-contact">Get in Touch</button>
+                <a href="#skills" class="btn-glass" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">Skills</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title reveal">My <span>Expertise</span></h2>
+        <div class="grid">
+            <div class="glass-card reveal">
+                <i class="fa-solid fa-code"></i>
+                <h3>Coding</h3>
+                <p>Expertise in full-stack web development, clean architecture, and responsive layouts for modern businesses.</p>
+            </div>
+            <div class="glass-card reveal">
+                <i class="fa-solid fa-comments"></i>
+                <h3>Communication</h3>
+                <p>Ensuring clarity and professional synergy between complex technical concepts and business requirements.</p>
+            </div>
+            <div class="glass-card reveal">
+                <i class="fa-solid fa-gamepad"></i>
+                <h3>Gaming</h3>
+                <p>Strategic analysis and quick decision-making cultivated through high-level competitive gaming environments.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" style="min-height: auto; padding-bottom: 60px;">
+    <div class="glass-card reveal" style="width: 100%; padding: 40px 20px;">
+        <h2 class="section-title" style="margin-bottom: 30px;">Let's <span>Connect</span></h2>
+        
+        <div class="contact-info" style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 35px;">
+            <p style="font-size: 0.95rem; color: var(--text-dim);">
+                <i class="fa-solid fa-envelope" style="color: var(--sky-blue); margin-right: 8px;"></i> krishnabarot544@gmail.com
+            </p>
+            <p style="font-size: 0.95rem; color: var(--text-dim);">
+                <i class="fa-solid fa-location-dot" style="color: var(--sky-blue); margin-right: 8px;"></i> Gujarat, India
+            </p>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            
+            <a href="https://www.linkedin.com/in/krishna-rao097" target="_blank" class="btn-glass" 
+               style="padding: 10px 20px; font-size: 0.85rem; background: rgba(0, 174, 255, 0.473); display: flex; align-items: center; gap: 10px;">
+                <i class="fa-brands fa-linkedin" style="font-size: 1.1rem;"></i> LinkedIn
+            </a>
+
+            <a href="https://github.com/krishb097" target="_blank" class="btn-glass" 
+               style="padding: 10px 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">
+                <i class="fa-brands fa-github" style="font-size: 1.1rem;"></i> GitHub
+            </a>
+
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn-glass open-contact" style="font-size: 0.85rem; background: transparent; border: 1px solid var(--sky-blue);">
+                <i class="fa-solid fa-paper-plane" style="margin-right: 8px; margin-bottom: 5px;"></i> Send Message
+            </button>
+        </div>
+    </div>
+</section>
+
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 style="color: var(--sky-blue); margin-bottom: 20px; font-size: 1.2rem;">Message RD-Industries</h3>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" required placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="Email Address">
+                </div>
+                <div class="form-group">
+                    <label>How can I help?</label>
+                    <textarea name="message" rows="4" required placeholder="Project details..."></textarea>
+                </div>
+                <button type="submit" class="btn-glass" style="width: 100%;">Send Message</button>
+            </form>
+            <p id="status-msg" style="margin-top: 15px; font-size: 0.8rem; text-align: center;"></p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://i.ibb.co/T50n8sP/rd-logo.jpg" alt="RD-Industries">
+                <div class="footer-logo-text">RD-<span>INDUSTRIES</span></div>
+            </div>
+            <p class="footer-text">Owned & Managed by <strong>Krishna Barot</strong></p>
+            <p style="font-size: 0.7rem; color: var(--glass-border); margin-top: 5px;">&copy; 2026 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        (function() { emailjs.init("_aIgic-rskGtVLlG3"); })();
+
+        const navLinks = document.getElementById('navLinks');
+        function toggleMenu() { navLinks.classList.toggle('active'); }
+        function closeMenu() { navLinks.classList.remove('active'); }
+
+        const modal = document.getElementById('contactModal');
+        const openBtns = document.querySelectorAll('.open-contact');
+        openBtns.forEach(btn => { btn.onclick = () => modal.classList.add('active'); });
+        function closeModal() { modal.classList.remove('active'); }
+        window.onclick = (e) => { if (e.target == modal) closeModal(); };
+
+        const contactForm = document.getElementById('contact-form');
+        const statusMsg = document.getElementById('status-msg');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            statusMsg.innerText = "Transmitting...";
+            statusMsg.style.color = "var(--sky-blue)";
+
+            emailjs.sendForm('service_126yb8q', 'template_xzjpezc', this)
+                .then(() => {
+                    statusMsg.innerText = "Message Received!";
+                    statusMsg.style.color = "#00ff88";
+                    contactForm.reset();
+                    setTimeout(() => { closeModal(); statusMsg.innerText = ""; }, 2500);
+                }, (err) => {
+                    statusMsg.innerText = "Error. Try again.";
+                    statusMsg.style.color = "#ff4d4d";
+                });
+        });
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
